@@ -8,4 +8,22 @@ namespace Ckr\Validata\Err;
  */
 interface LocationInterface
 {
+
+    /**
+     * @return string
+     */
+    public function getType();
+
+    /**
+     * Returns a value describing the location.
+     * The type of this value depends on the `getType` result
+     *
+     * @return string|int
+     */
+    public function getLocation();
+
+    /**
+     * @return string
+     */
+    public function __toString();
 }

@@ -19,4 +19,9 @@ class LocationStack
     {
         array_unshift($this->stack, $loc);
     }
+
+    public function getSimpleStack()
+    {
+        return array_map('strval', $this->stack);
+    }
 }
