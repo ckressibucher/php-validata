@@ -98,4 +98,12 @@ class Result
     {
         return isset($this->validData);
     }
+
+    /**
+     * @return bool
+     */
+    public function hasErrors()
+    {
+        return count($this->getErrors()) > 0;
+    }
 }

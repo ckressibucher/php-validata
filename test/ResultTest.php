@@ -83,4 +83,27 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $result = Result::makeOnlyErrors($errors);
         $this->assertSame(false, $result->getValidData(false));
     }
+
+    /**
+     * @test
+     */
+    public function its_hasErrors_returns_true_if_there_is_one_error()
+    {
+        $errors = [new Err(
+            new LocationStack(),
+            new ErrorMsg('SOME_ERR', 'some bad input value')
+        )];
+
+        $result = Result::make('data', $errors);
+        $this->assertTrue($result->hasErrors());
+    }
+
+    /**
+     * @test
+     */
+    public function its_hasErrors_returns_false_if_there_arent_errors()
+    {
+        $result = Result::makeValid('data');
+        $this->assertFalse($result->hasErrors());
+    }
 }

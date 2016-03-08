@@ -50,8 +50,6 @@ class Seq implements SchemaInterface
     /**
      * Seq constructor. See class properties for detailed info.
      *
-     * TODO should we allow to check for unique items? How to check equality?
-     *
      * @param Validatable $itemValidator
      * @param int $minSize
      * @param int $maxSize
@@ -67,6 +65,6 @@ class Seq implements SchemaInterface
     {
         $errs = [];
         // TODO validate each item
-        return new Result(null, $errs);
+        return Result::makeValid([]);
     }
 }
