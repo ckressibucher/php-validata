@@ -32,7 +32,7 @@ class Result
      *                           (This is required to dinstinguish "no valid data" from null or
      *                           similar values)
      */
-    public function __construct($validData, array $errs, $noValidData = false)
+    private function __construct($validData, array $errs, $noValidData = false)
     {
         if (! $noValidData) {
             $this->validData = $validData;
@@ -41,6 +41,20 @@ class Result
     }
 
     /**
+     * Constructs an instance with valid data AND errors
+     *
+     * @param mixed $validData
+     * @param Err[] $errs
+     * @return Result
+     */
+    public static function make($validData, array $errs)
+    {
+        return new self($validData, $errs);
+    }
+
+    /**
+     * Constructs an instance with only valid data
+     *
      * @param $validData
      * @return Result
      */
@@ -50,7 +64,9 @@ class Result
     }
 
     /**
-     * @param array $errors
+     * Constructs an instance with only errors
+     *
+     * @param Err[] $errors
      * @return Result
      */
     public static function makeOnlyErrors(array $errors)

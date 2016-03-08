@@ -69,6 +69,6 @@ class Map implements SchemaInterface
                 $validData[$key] = $res->getValidData();
             }
         }
-        return new Result($validData, $errs);
+        return Result::make($validData, $errs);
     }
 }

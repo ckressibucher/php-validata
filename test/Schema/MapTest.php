@@ -5,6 +5,7 @@ namespace Ckr\Validata\Test\Schema;
 
 use Ckr\Validata\Err\Err;
 use Ckr\Validata\Err\ErrorMsg;
+use Ckr\Validata\Err\HereLoc;
 use Ckr\Validata\Err\LocationInterface;
 use Ckr\Validata\Err\LocationStack;
 use Ckr\Validata\Result;
@@ -100,13 +101,48 @@ class MapTest extends \PHPUnit_Framework_TestCase
             $this->assertSame('another', $key);
             $this->assertSame($err, $resultErr);
         }
-
     }
 
-    private function makeErr($id, $inputValue = 'dontcare', $desc = '', $data = [])
+    /**
+     * @test
+     */
+    public function its_validate_prepends_location_to_error_stack()
+    {
+        $data = ['rootkey' => 'some bad input'];
+
+        $err = $this->makeErr(
+            'SCALAR_ERROR',
+            $data['rootkey'],
+            '',
+            [],
+            [HereLoc::getInstance()]
+        );
+        $subSchemaResult = Result::makeOnlyErrors([$err]);
+        $subSchema = $this->getMockForAbstractClass(SchemaInterface::class);
+        $subSchema->expects($this->any())
+            ->method('validate')
+            ->willReturn($subSchemaResult);
+
+        $schema = new Map();
+        $schema->property('rootkey', $subSchema);
+
+        $result = $schema->validate($data);
+        $errors = $result->getErrors();
+
+        // the first (only) error should be the same as $err, but with 'key' Location prepended
+        /* @var $resultError Err */
+        $resultError = reset($errors);
+        $this->assertSame('SCALAR_ERROR', $resultError->getMsg()->getId());
+        $locStack = $resultError->getLocation();
+        list($rootLoc, $subLoc) = $locStack->getSimpleStack();
+        $this->assertSame('key:rootkey', $rootLoc);
+        $this->assertSame('here:', $subLoc);
+    }
+
+    private function makeErr($id, $inputValue = 'dontcare', $desc = '', $data = [], $locations = [])
     {
         $errMsg = new ErrorMsg($id, $inputValue, $desc, $data);
-        $stack = new LocationStack();
+        $stack = new LocationStack($locations);
         return new Err($stack, $errMsg);
     }
 }
