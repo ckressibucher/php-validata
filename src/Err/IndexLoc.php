@@ -6,6 +6,8 @@ class IndexLoc implements LocationInterface
 {
     use LocationTrait;
 
+    const TYPE = 'index';
+
     protected $index;
 
     /**
@@ -21,7 +23,7 @@ class IndexLoc implements LocationInterface
      */
     public function getType()
     {
-        return 'index';
+        return self::TYPE;
     }
 
     /**

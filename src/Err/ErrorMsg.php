@@ -41,4 +41,36 @@ class ErrorMsg
         $this->desc = $desc;
         $this->data = $data;
     }
+
+    /**
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesc()
+    {
+        return $this->desc;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getInputValue()
+    {
+        return $this->inputValue;
+    }
 }

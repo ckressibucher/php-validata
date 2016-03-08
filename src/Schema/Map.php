@@ -4,17 +4,25 @@
 namespace Ckr\Validata\Schema;
 
 
+use Ckr\Validata\Err\Err;
+use Ckr\Validata\Err\KeyLoc;
 use Ckr\Validata\Result;
 
+/**
+ * A schema for a map data structure
+ */
 class Map implements SchemaInterface
 {
 
     /**
-     * @var array
+     * @var SchemaInterface[]
      */
     protected $map;
 
 
+    /**
+     * @param SchemaInterface[] $schemas An associative array with `SchemaInterface` values
+     */
     public function __construct(array $schemas = [])
     {
         $this->map = $schemas;
@@ -41,7 +49,26 @@ class Map implements SchemaInterface
     public function validate($data)
     {
         $errs = [];
-        // TODO
-        return new Result(null, $errs);
+        $validData = [];
+        foreach ($data as $key => $val) {
+            if (! isset($this->map[$key])) {
+                continue; // ignore values not defined in schema
+            }
+            $subSchema = $this->map[$key];
+            $res = $subSchema->validate($val);
+
+            // prepend the key to each error of the sub validation
+            $_errs = array_map(function($_err) use ($key) {
+                /* @var $_err \Ckr\Validata\Err\Err */
+                $_loc = $_err->getLocation()->prepend(new KeyLoc($key));
+                return new Err($_loc, $_err->getMsg());
+            }, $res->getErrors());
+            $errs = array_merge($errs, $_errs);
+
+            if ($res->hasValidData()) {
+                $validData[$key] = $res->getValidData();
+            }
+        }
+        return new Result($validData, $errs);
     }
 }

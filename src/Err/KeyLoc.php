@@ -7,6 +7,8 @@ class KeyLoc implements LocationInterface
 
     use LocationTrait;
 
+    const TYPE = 'key';
+
     protected $key;
 
     /**
@@ -22,7 +24,7 @@ class KeyLoc implements LocationInterface
      */
     public function getType()
     {
-        return 'key';
+        return self::TYPE;
     }
 
     /**
