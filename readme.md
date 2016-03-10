@@ -6,6 +6,8 @@ A library to validate structured data against a schema.
 Status
 -----
 
+[![Build Status](https://travis-ci.org/ckressibucher/php-validata.svg)](https://travis-ci.org/ckressibucher/php-validata)
+
 This library is currently actively developed, and changed to its API should be expected.
 If you want to use it in production, please check the status again in a few weeks...
 
