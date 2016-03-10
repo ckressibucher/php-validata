@@ -40,4 +40,16 @@ class Err
         return $this->location;
     }
 
+    /**
+     * Returns a new instance with the given Location prepended
+     * to the current location stack
+     *
+     * @param LocationInterface $loc
+     * @return Err
+     */
+    public function prependLocation(LocationInterface $loc)
+    {
+        $_loc = $this->getLocation()->prepend($loc);
+        return new self($_loc, $this->getMsg());
+    }
 }

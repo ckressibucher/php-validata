@@ -58,10 +58,8 @@ class Map implements SchemaInterface
             $res = $subSchema->validate($val);
 
             // prepend the key to each error of the sub validation
-            $_errs = array_map(function($_err) use ($key) {
-                /* @var $_err \Ckr\Validata\Err\Err */
-                $_loc = $_err->getLocation()->prepend(new KeyLoc($key));
-                return new Err($_loc, $_err->getMsg());
+            $_errs = array_map(function(Err $_err) use ($key) {
+                return $_err->prependLocation(new KeyLoc($key));
             }, $res->getErrors());
             $errs = array_merge($errs, $_errs);
 
