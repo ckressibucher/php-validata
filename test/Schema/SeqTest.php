@@ -4,6 +4,11 @@
 namespace Ckr\Validata\Test\Schema;
 
 
+use Ckr\Validata\Err\Err;
+use Ckr\Validata\Err\ErrorMsg;
+use Ckr\Validata\Err\HereLoc;
+use Ckr\Validata\Err\KeyLoc;
+use Ckr\Validata\Err\LocationStack;
 use Ckr\Validata\Result;
 use Ckr\Validata\Schema\Seq;
 use Ckr\Validata\Schema\SchemaInterface;
@@ -78,6 +83,40 @@ class SeqTest extends \PHPUnit_Framework_TestCase
         $res = $this->runValidate($data);
         $this->assertFalse($res->hasValidData());
         $this->assertOneError($res, Seq::NOT_A_SEQ);
+    }
+
+    /**
+     * @test
+     */
+    public function its_validate_prepends_index_to_subschema_errors()
+    {
+        $inputData = ['bad value 0', 'good value', 'bad value 2']; // two errors, one ok, see callback mock
+
+        $itemValidator = $this->getMockForAbstractClass(SchemaInterface::class);
+        $itemValidator->expects($this->exactly(3))
+            ->method('validate')
+            ->will($this->returnCallback(function($_data) {
+                if ($_data === 'good value') {
+                    return Result::makeValid($_data);
+                } else {
+                    $_err = new Err(
+                        LocationStack::fromLocation(HereLoc::getInstance()),
+                        new ErrorMsg('ERR_X', $_data)
+                    );
+                    return Result::makeOnlyErrors([$_err]);
+                }
+            }));
+
+        $result = $this->runValidate($inputData, $itemValidator);
+        $this->assertEquals(['good value'], $result->getValidData());
+
+        $errs = $result->getErrors();
+        $this->assertCount(2, $errs);
+        /* @var $firstErr Err */
+        /* @var $secErr Err */
+        list($firstErr, $secErr) = $errs;
+        $this->assertSame(['index:0', 'here:'], $firstErr->getLocation()->getSimpleStack());
+        $this->assertSame(['index:2', 'here:'], $secErr->getLocation()->getSimpleStack());
     }
 
     /**
