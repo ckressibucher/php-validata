@@ -7,6 +7,7 @@ Status
 -----
 
 [![Build Status](https://travis-ci.org/ckressibucher/php-validata.svg)](https://travis-ci.org/ckressibucher/php-validata)
+[![Coverage Status](https://coveralls.io/repos/github/ckressibucher/php-validata/badge.svg?branch=master)](https://coveralls.io/github/ckressibucher/php-validata?branch=master)
 
 This library is currently actively developed, and changed to its API should be expected.
 If you want to use it in production, please check the status again in a few weeks...

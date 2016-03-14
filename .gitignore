@@ -1,3 +1,5 @@
 /vendor/
 /composer.lock
 /.idea
+/test/logs/*
+/coveralls.fish

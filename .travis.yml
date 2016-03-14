@@ -1,9 +1,16 @@
 language: php
 php:
-  - "5.6"
-  - "7.0"
+  - 5.6
+  - 7.0
 
-install: "composer install"
+install:
+  - composer require --no-interaction satooshi/php-coveralls
+  - composer install --no-interaction
 
-script: "./vendor/bin/phpunit -c ./test/phpunit.xml.dist" 
+script:
+  - mkdir -p ./test/logs
+  - ./vendor/bin/phpunit -c ./test/phpunit.xml.dist
+
+after_sucess:
+  - travis_retry php ./vendor/bin/coveralls -x ./test/logs/clover.xml
 
