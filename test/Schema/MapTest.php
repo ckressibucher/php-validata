@@ -36,9 +36,21 @@ class MapTest extends \PHPUnit_Framework_TestCase
     {
         $subSchema = $this->getMockForAbstractClass(SchemaInterface::class);
         $mapSchema = new Map();
-        $mapSchema->property('subkey', $subSchema);
+        $newSchema = $mapSchema->property('subkey', $subSchema);
 
-        $this->assertAttributeEquals(['subkey' => $subSchema], 'map', $mapSchema);
+        $this->assertAttributeEquals(['subkey' => $subSchema], 'map', $newSchema);
+    }
+
+    /**
+     * @test
+     */
+    public function its_property_doesnt_mutate_original_instance()
+    {
+        $subSchema = $this->getMockForAbstractClass(SchemaInterface::class);
+        $mapSchema = new Map();
+        $mapSchema->property('subkey', $subSchema); // must not mutate $mapSchema
+
+        $this->assertAttributeCount(0, 'map', $mapSchema);
     }
 
     /**
@@ -58,7 +70,7 @@ class MapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($subSchemaResult);
 
         $schema = new Map();
-        $schema->property('key', $subSchema);
+        $schema = $schema->property('key', $subSchema);
 
         $result = $schema->validate($data);
         $this->assertEmpty($result->getErrors());
@@ -124,7 +136,7 @@ class MapTest extends \PHPUnit_Framework_TestCase
             ->willReturn($subSchemaResult);
 
         $schema = new Map();
-        $schema->property('rootkey', $subSchema);
+        $schema = $schema->property('rootkey', $subSchema);
 
         $result = $schema->validate($data);
         $errors = $result->getErrors();

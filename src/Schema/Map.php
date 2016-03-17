@@ -37,7 +37,9 @@ class Map implements SchemaInterface
      */
     public function property($key, SchemaInterface $validationSchema)
     {
-        $this->map[$key] = $validationSchema;
+        $schemas = $this->map;
+        $schemas[$key] = $validationSchema;
+        return new static($schemas);
     }
 
     /**
