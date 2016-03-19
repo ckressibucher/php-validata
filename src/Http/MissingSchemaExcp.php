@@ -7,9 +7,10 @@ class MissingSchemaExcp extends \RuntimeException
 {
     public $clazz;
 
-    public static function make($clazz)
+    public static function make($clazz, $message = null)
     {
-        $e = new self();
+        $message = $message ?: sprintf('No schema defined in class=%s', $clazz);
+        $e = new self($message);
         $e->clazz = $clazz;
         return $e;
     }

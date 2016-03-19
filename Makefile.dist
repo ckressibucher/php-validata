@@ -1,7 +1,19 @@
-PHP56 = php56
-PHP70 = php7
-COMPOSER = composer70.sh
+# please copy this file from Makefile.dist to Makefile, and
+# fill in the proper variables to use your environments executables
+
+PHP56 = php56            # php5.6 binary
+PHP70 = php7             # php7.0 binary
+COMPOSER = composer70.sh # composer binary
 PHPCS = $(PHP56) ~/.composer/vendor/bin/phpcs
+
+list:
+	@echo "list       | list commands"
+	@echo "all        | tests and codesniffer"
+	@echo "test       | run phpunit tests with php5.6 and php7.0"
+	@echo "test_php56 | run tests with php5.6"
+	@echo "test_php70 | run tests with php7.0"
+	@echo "install    | install dependencies"
+	@echo "update     | update dependencies"
 
 all: test codesniff
 
@@ -25,3 +37,5 @@ test_php70: install
 codesniff:
 	$(PHPCS) --standard=psr2 ./src
 
+update:
+	$(COMPOSER) update

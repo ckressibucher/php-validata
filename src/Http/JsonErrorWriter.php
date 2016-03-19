@@ -49,10 +49,16 @@ class JsonErrorWriter implements ErrorWriterInterface
                 ];
             }, $err->getLocation()->getStack());
             return [
-                'error_message' => $err->getMsg(),
+                'error_id' => $err->getMsg()->getId(),
+                'error_desc' => $err->getMsg()->getDesc(),
+                'error_data' => $err->getMsg()->getData(),
+                'input_value' => $err->getMsg()->getInputValue(),
                 'stack' => $stack,
             ];
         }, $validationResult->getErrors());
+        if (0 !== $res->getBody()->tell()) {
+            throw new \RuntimeException('body of response is not empty');
+        }
         $res->getBody()->write(json_encode($data));
         return $res->withStatus($httpCode)->withHeader('Content-Type', 'application/json');
     }
