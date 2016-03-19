@@ -3,7 +3,6 @@
 
 namespace Ckr\Validata;
 
-
 use Ckr\Validata\Err\Err;
 
 class Result

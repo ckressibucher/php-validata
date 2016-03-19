@@ -3,3 +3,4 @@
 /.idea
 /test/logs/*
 /coveralls.fish
+/test/phpunit.xml

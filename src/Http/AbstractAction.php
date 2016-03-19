@@ -3,7 +3,6 @@
 
 namespace Ckr\Validata\Http;
 
-
 use Ckr\Validata\Schema\SchemaInterface;
 use Ckr\Validata\Validator;
 use Psr\Http\Message\ResponseInterface;

@@ -3,7 +3,6 @@
 
 namespace Ckr\Validata\Schema;
 
-
 use Ckr\Validata\Err\Err;
 use Ckr\Validata\Err\ErrorMsg;
 use Ckr\Validata\Err\HereLoc;
@@ -72,7 +71,7 @@ class Seq implements SchemaInterface
         $validData = [];
 
         list($initErrors, $traversedSeq) = $this->validateSeqLen($input);
-        $errs = array_map(function(ErrorMsg $e) {
+        $errs = array_map(function (ErrorMsg $e) {
             return new Err(LocationStack::fromLocation(HereLoc::getInstance()), $e);
         }, $initErrors);
 
@@ -83,7 +82,7 @@ class Seq implements SchemaInterface
 
         foreach ($traversedSeq as $idx => $item) {
             $res = $this->itemValidator->validate($item);
-            $_errs = array_map(function(Err $_err) use ($idx) {
+            $_errs = array_map(function (Err $_err) use ($idx) {
                 return $_err->prependLocation(new IndexLoc($idx));
             }, $res->getErrors());
             $errs = array_merge($errs, $_errs);
@@ -107,10 +106,12 @@ class Seq implements SchemaInterface
             $errMsg = new ErrorMsg(self::NOT_A_SEQ, $input, 'not a sequence');
             return [[$errMsg], []];
         }
-        $fnCount = function() use ($input) {
+        $fnCount = function () use ($input) {
             // return both, count and traversed sequence (as array) to support `Generator`s
             $traversedSeq = [];
-            foreach($input as $i) $traversedSeq[] = $i;
+            foreach ($input as $i) {
+                $traversedSeq[] = $i;
+            }
             return [count($traversedSeq), $traversedSeq];
         };
 

@@ -1,0 +1,27 @@
+PHP56 = php56
+PHP70 = php7
+COMPOSER = composer70.sh
+PHPCS = $(PHP56) ~/.composer/vendor/bin/phpcs
+
+all: test codesniff
+
+.PHONY:
+test: test_php56 test_php70
+
+install: vendor/autoload.php test/phpunit.xml
+
+vendor/autoload.php:
+	$(COMPOSER) install
+
+test/phpunit.xml:
+	ls ./test/phpunit.xml > /dev/null || cp ./test/phpunit.xml.dist ./test/phpunit.xml
+
+test_php56: install
+	$(PHP56) ./vendor/bin/phpunit -c ./test/phpunit.xml
+
+test_php70: install
+	$(PHP70) ./vendor/bin/phpunit -c ./test/phpunit.xml
+
+codesniff:
+	$(PHPCS) --standard=psr2 ./src
+

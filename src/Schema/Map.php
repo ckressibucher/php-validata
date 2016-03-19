@@ -3,7 +3,6 @@
 
 namespace Ckr\Validata\Schema;
 
-
 use Ckr\Validata\Err\Err;
 use Ckr\Validata\Err\KeyLoc;
 use Ckr\Validata\Result;
@@ -60,7 +59,7 @@ class Map implements SchemaInterface
             $res = $subSchema->validate($val);
 
             // prepend the key to each error of the sub validation
-            $_errs = array_map(function(Err $_err) use ($key) {
+            $_errs = array_map(function (Err $_err) use ($key) {
                 return $_err->prependLocation(new KeyLoc($key));
             }, $res->getErrors());
             $errs = array_merge($errs, $_errs);

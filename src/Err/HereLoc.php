@@ -25,7 +25,7 @@ class HereLoc implements LocationInterface
      */
     public static function getInstance()
     {
-        if (!isset (self::$instance)) {
+        if (! isset(self::$instance)) {
             self::$instance = new self;
         }
         return self::$instance;
@@ -53,5 +53,4 @@ class HereLoc implements LocationInterface
     {
         return '';
     }
-
 }

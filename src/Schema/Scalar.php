@@ -3,7 +3,6 @@
 
 namespace Ckr\Validata\Schema;
 
-
 use Ckr\Validata\Err\Err;
 use Ckr\Validata\Err\ErrorMsg;
 use Ckr\Validata\Err\HereLoc;

@@ -3,7 +3,6 @@
 
 namespace Ckr\Validata\Err;
 
-
 trait LocationTrait
 {
 
@@ -15,5 +14,4 @@ trait LocationTrait
     {
         return $this->getType() . ':' . strval($this->getLocation());
     }
-
 }
