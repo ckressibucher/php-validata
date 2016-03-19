@@ -90,7 +90,7 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
         $req = (new ServerRequestMock())->withQueryParams($input)
             ->withMethod('GET');
         $actual = $this->runGetInputData($req);
-        $this->assertEquals($input, $actual);
+        $this->assertSame('search', $actual['q']);
     }
 
     /**
@@ -102,19 +102,20 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
         $req = (new ServerRequestMock())->withQueryParams($input)
             ->withMethod('HEAD');
         $actual = $this->runGetInputData($req);
-        $this->assertEquals($input, $actual);
+        $this->assertSame('search...', $actual['q']);
     }
 
     /**
      * @test
      */
-    public function its_getInput_returns_empty_array_on_empty_POST()
+    public function its_getInput_returns_only_urlparams_on_empty_POST()
     {
         $req = (new ServerRequestMock())->withParsedBody('')
             ->withMethod('POST');
+
+        $expected = ['url' => []];
         $actual = $this->runGetInputData($req);
-        $this->assertCount(0, $actual);
-        $this->assertTrue(is_array($actual));
+        $this->assertEquals($expected, $actual);
     }
 
     /**
@@ -125,14 +126,17 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
         $bodyData = ['name' => 'rosa', 'pass' => 'rosa124'];
         $req = (new ServerRequestMock())->withParsedBody($bodyData)
             ->withMethod('POST');
+
         $actual = $this->runGetInputData($req);
-        $this->assertEquals($bodyData, $actual);
+
+        $this->assertSame('rosa', $actual['name']);
+        $this->assertSame('rosa124', $actual['pass']);
     }
 
     /**
      * @test
      */
-    public function its_getInput_returns_empty_array_on_POST_object_data()
+    public function its_getInput_returns_only_urlparams_on_POST_object_data()
     {
         // We cannot handle objects, as we do not know anything about them.
         // For that reason, we just return an empty array per default and
@@ -141,8 +145,20 @@ class AbstractActionTest extends \PHPUnit_Framework_TestCase
         $req = (new ServerRequestMock())->withParsedBody($bodyData)
             ->withMethod('POST');
         $actual = $this->runGetInputData($req);
-        $this->assertCount(0, $actual);
-        $this->assertTrue(is_array($actual));
+        $this->assertEquals(['url' => []], $actual);
+    }
+
+    /**
+     * @test
+     */
+    public function its_getInput_returns_url_params()
+    {
+        $req = (new ServerRequestMock())
+            ->withAttribute('url_params', ['product' => '36'])
+            ->withMethod('GET');
+
+        $actual = $this->runGetInputData($req);
+        $this->assertSame('36', $actual['url']['product']);
     }
 
     /**

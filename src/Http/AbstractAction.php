@@ -56,20 +56,35 @@ abstract class AbstractAction
     /**
      * Please override this to implement more specific behaviour.
      *
+     * This implementation
+     *
      * {@inheritdoc}
      */
     protected function getInputData(ServerRequestInterface $req)
     {
+        $data = [];
         if (in_array(strtoupper($req->getMethod()), ['GET', 'HEAD'])) {
-            return $req->getQueryParams();
-        }
-        $body = $req->getParsedBody();
-        if (is_array($body)) {
-            return $body;
-        } elseif (is_object($body)) {
+            $data = $req->getQueryParams();
+        } else {
+            $body = $req->getParsedBody();
+            if (is_array($body)) {
+                $data = $body;
+            } //elseif (is_object($body))
             // cannot handle objects, this must be implemented in subclass
-            return [];
         }
-        return [];
+        return $this->addUrlParams($data, $req->getAttribute('url_params', []));
+    }
+
+    /**
+     * Adds url data to input data, using key `url`.
+     *
+     * @param array $inputData
+     * @param array $urlParams
+     * @return array
+     */
+    protected function addUrlParams(array $inputData, array $urlParams)
+    {
+        $inputData['url'] = $urlParams;
+        return $inputData;
     }
 }
