@@ -71,7 +71,7 @@ trait ActionTrait
             throw  MissingSchemaExcp::make(__CLASS__);
         }
 
-        $validationResult = $validator->run($this->validationSchema, $input);
+        $validationResult = $validator->validate($this->validationSchema, $input);
 
         if ($validationResult->hasErrors()) {
             return $this->handleDataErrors($validationResult, $req, $res);
@@ -137,7 +137,7 @@ trait ActionTrait
         ResponseInterface $res
     ) {
         $code = (int) $res->getStatusCode();
-        $code = $code !== 200 ? 400 : $code; // if code is not default (200), do not overwrite it
+        $code = $code === 200 ? 400 : $code; // if code is not default (200), do not overwrite it
         return $this->errorWriter->makeErrResponse($msg, $code, $validationResult, $res);
     }
 }

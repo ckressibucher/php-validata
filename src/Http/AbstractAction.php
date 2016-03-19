@@ -66,6 +66,9 @@ abstract class AbstractAction
         $body = $req->getParsedBody();
         if (is_array($body)) {
             return $body;
+        } elseif (is_object($body)) {
+            // cannot handle objects, this must be implemented in subclass
+            return [];
         }
         return [];
     }
