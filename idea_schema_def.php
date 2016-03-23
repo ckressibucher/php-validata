@@ -26,3 +26,14 @@ function diContainerInit(Container $c) {
         return new ControllerAction($schema);
     };
 }
+
+// ======== alternative idea =============
+// let controller define one data class, which is passed to the action method.
+// the data class defines properties with annotations that define the validation
+// it may also define sequences and maps with additional data classes.
+// This annotated data classes allow the framework to build the validation schema.
+// Before the action is called, the data class is instantiated and populated with
+// the input data.
+// Maybe allow other formats to define the meta data for the data classes (to
+// allow non-annotation opcache).
+// See symfony/validation for inspiration
