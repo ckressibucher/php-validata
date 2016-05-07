@@ -11,6 +11,6 @@ script:
   - mkdir -p ./test/logs
   - ./vendor/bin/phpunit -c ./test/phpunit.xml.dist
 
-after_sucess:
+after_success:
   - travis_retry php ./vendor/bin/coveralls -x ./test/logs/clover.xml
 
